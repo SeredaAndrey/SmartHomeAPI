@@ -48,7 +48,6 @@ const loginAdminController = async (req, res, next) => {
 };
 
 const logoutAdminController = async (req, res, next) => {
-  console.log(req);
   const _id = req.user._id;
   const result = await logoutAdminService(_id);
   if (result) {
