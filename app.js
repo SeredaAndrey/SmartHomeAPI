@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const { adminRouter } = require("./routes/adminRoute");
+const { userRouter } = require("./routes/userRoute");
 
 const { errorHandler } = require("./middleware/errorHandler");
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/admin", adminRouter);
+app.use("/user", userRouter);
 
 app.use(errorHandler);
 
