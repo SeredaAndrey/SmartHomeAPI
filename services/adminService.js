@@ -39,4 +39,12 @@ const loginAdminService = async ({ name, password }) => {
   }
 };
 
-module.exports = { createAdminService, loginAdminService };
+const logoutAdminService = async (_id) => {
+  return await Admin.findByIdAndUpdate(
+    { _id, loggedIn: true },
+    { loggedIn: false },
+    { new: true }
+  );
+};
+
+module.exports = { createAdminService, loginAdminService, logoutAdminService };

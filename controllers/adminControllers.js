@@ -6,6 +6,7 @@ const {
 const {
   createAdminService,
   loginAdminService,
+  logoutAdminService,
 } = require("../services/adminService");
 const { workAdminValidate } = require("../validate/adminValidate");
 
@@ -46,4 +47,19 @@ const loginAdminController = async (req, res, next) => {
   } else throw new ValidateError(requestValidate.error);
 };
 
-module.exports = { createAdminController, loginAdminController };
+const logoutAdminController = async (req, res, next) => {
+  const _id = req.admin._id;
+  const result = await logoutAdminService(_id);
+  if (result) {
+    return res.status(204).json({
+      message: "logout admin successful",
+      code: 204,
+    });
+  }
+};
+
+module.exports = {
+  createAdminController,
+  loginAdminController,
+  logoutAdminController,
+};
