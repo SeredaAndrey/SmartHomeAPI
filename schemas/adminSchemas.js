@@ -27,15 +27,6 @@ const admin = new Schema(
       enum: ["en", "ru", "ua"],
       default: "en",
     },
-    users: [
-      {
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          reference: "users",
-          default: null,
-        },
-      },
-    ],
   },
   { timestamps: true }
 );
