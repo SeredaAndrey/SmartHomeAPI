@@ -1,5 +1,12 @@
-const { ConflictError, ValidateError } = require("../middleware/errorHandler");
-const { createAdminService } = require("../services/adminService");
+const {
+  ConflictError,
+  ValidateError,
+  AutorizationError,
+} = require("../middleware/errorHandler");
+const {
+  createAdminService,
+  loginAdminService,
+} = require("../services/adminService");
 const { workAdminValidate } = require("../validate/adminValidate");
 
 const createAdminController = async (req, res, next) => {
@@ -12,7 +19,7 @@ const createAdminController = async (req, res, next) => {
       return res.status(201).json({
         message: "admin created",
         code: 201,
-        admin,
+        data: admin,
       });
     } else {
       throw new ConflictError("This name is already use");
@@ -22,4 +29,21 @@ const createAdminController = async (req, res, next) => {
   }
 };
 
-module.exports = { createAdminController };
+const loginAdminController = async (req, res, next) => {
+  const requestValidate = workAdminValidate.validate(req.body);
+  const body = req.body;
+
+  if (!requestValidate.error) {
+    const admin = await loginAdminService(body);
+    if (!admin) {
+      throw new AutorizationError("Name or password is wrong");
+    }
+    return res.status(200).json({
+      message: "logged admin successful",
+      code: 200,
+      data: admin,
+    });
+  } else throw new ValidateError(requestValidate.error);
+};
+
+module.exports = { createAdminController, loginAdminController };

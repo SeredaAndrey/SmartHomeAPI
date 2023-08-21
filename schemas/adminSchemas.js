@@ -27,6 +27,10 @@ const admin = new Schema(
       enum: ["en", "ru", "ua"],
       default: "en",
     },
+    loggedIn: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
