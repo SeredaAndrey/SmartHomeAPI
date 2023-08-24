@@ -7,6 +7,7 @@ const {
   createAdminController,
   loginAdminController,
   logoutAdminController,
+  patchAdminController,
 } = require("../controllers/adminControllers");
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.post("/login", asyncWrapper(loginAdminController));
 router.use(authMiddleware);
 
 router.get("/logout", asyncWrapper(logoutAdminController));
+router.patch("/", asyncWrapper(patchAdminController));
 
 module.exports = { adminRouter: router };

@@ -7,8 +7,12 @@ const {
   createAdminService,
   loginAdminService,
   logoutAdminService,
+  patchAdminService,
 } = require("../services/adminService");
-const { workAdminValidate } = require("../validate/adminValidate");
+const {
+  workAdminValidate,
+  patchAdminValidate,
+} = require("../validate/adminValidate");
 
 const createAdminController = async (req, res, next) => {
   const requestValidate = workAdminValidate.validate(req.body);
@@ -58,8 +62,30 @@ const logoutAdminController = async (req, res, next) => {
   }
 };
 
+const patchAdminController = async (req, res, next) => {
+  const _id = req.user._id;
+  const body = req.body;
+
+  console.log("body: ", body);
+
+  const requestValidate = patchAdminValidate.validate(req.body);
+
+  if (!requestValidate.error) {
+    const admin = await patchAdminService(_id, body);
+    if (!admin) {
+      throw new ConflictError("something is wrong");
+    }
+    return res.status(200).json({
+      message: "patching admin data successful",
+      code: 200,
+      data: admin,
+    });
+  } else throw new ValidateError(requestValidate.error);
+};
+
 module.exports = {
   createAdminController,
   loginAdminController,
   logoutAdminController,
+  patchAdminController,
 };

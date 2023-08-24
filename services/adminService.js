@@ -47,4 +47,20 @@ const logoutAdminService = async (_id) => {
   );
 };
 
-module.exports = { createAdminService, loginAdminService, logoutAdminService };
+const patchAdminService = async (_id, body) => {
+  console.log("body: ", body);
+  return await Admin.findOneAndUpdate(
+    {
+      _id,
+    },
+    body,
+    { new: true }
+  );
+};
+
+module.exports = {
+  createAdminService,
+  loginAdminService,
+  logoutAdminService,
+  patchAdminService,
+};
