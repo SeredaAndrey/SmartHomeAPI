@@ -10,12 +10,12 @@ const {
   patchAdminService,
 } = require("../services/adminService");
 const {
-  workAdminValidate,
-  patchAdminValidate,
-} = require("../validate/adminValidate");
+  workUserValidate,
+  patchUserValidate,
+} = require("../validate/userValidate");
 
 const createAdminController = async (req, res, next) => {
-  const requestValidate = workAdminValidate.validate(req.body);
+  const requestValidate = workUserValidate.validate(req.body);
   const body = req.body;
 
   if (!requestValidate.error) {
@@ -35,7 +35,7 @@ const createAdminController = async (req, res, next) => {
 };
 
 const loginAdminController = async (req, res, next) => {
-  const requestValidate = workAdminValidate.validate(req.body);
+  const requestValidate = workUserValidate.validate(req.body);
   const body = req.body;
 
   if (!requestValidate.error) {
@@ -66,7 +66,7 @@ const patchAdminController = async (req, res, next) => {
   const _id = req.user._id;
   const body = req.body;
 
-  const requestValidate = patchAdminValidate.validate(req.body);
+  const requestValidate = patchUserValidate.validate(req.body);
 
   if (!requestValidate.error) {
     const admin = await patchAdminService(_id, body);

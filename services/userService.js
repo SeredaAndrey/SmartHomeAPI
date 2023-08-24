@@ -2,18 +2,17 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const User = require("../schemas/userSchemas");
-const Admin = require("../schemas/adminSchemas");
 
 const createUserService = async (name, password, owner) => {
-  const resOwner = await Admin.findOne({ _id: owner });
-  if (resOwner.owner) {
+  const resOwner = await User.findOne({ _id: owner });
+  if (resOwner.admin === false) {
     return;
   } else {
     const resUser = await User.findOne({ name, owner });
     if (resUser) {
       return;
     }
-    const newUser = new User({ name, password, owner });
+    const newUser = new User({ name, password, owner, admin: false });
     await newUser.save();
     const user = await User.findOne({ name, owner }, { password: 0, __v: 0 });
     return { user };
@@ -53,8 +52,8 @@ const logoutUserService = async (_id) => {
 };
 
 const deleteUserService = async (owner, userId) => {
-  const resOwner = await Admin.findOne({ _id: owner });
-  if (resOwner.owner) {
+  const resOwner = await User.findOne({ _id: owner });
+  if (resOwner.admin === false) {
     return;
   } else {
     return await User.findOneAndRemove({ _id: userId });

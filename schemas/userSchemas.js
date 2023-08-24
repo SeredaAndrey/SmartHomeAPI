@@ -36,6 +36,10 @@ const user = new Schema(
       ref: "owner",
       default: null,
     },
+    admin: {
+      type: String,
+      default: true,
+    },
   },
   { timestamps: true }
 );

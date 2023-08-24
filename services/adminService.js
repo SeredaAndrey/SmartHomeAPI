@@ -1,46 +1,46 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const Admin = require("../schemas/adminSchemas");
+const User = require("../schemas/userSchemas");
 
 const createAdminService = async ({ name, password }) => {
-  const resAdmin = await Admin.findOne({ name });
-  if (resAdmin) {
+  const resUser = await User.findOne({ name });
+  if (resUser) {
     return;
   }
-  const newAdmin = new Admin({ name, password });
-  await newAdmin.save();
-  const admin = await Admin.findOne({ name }, { password: 0, __v: 0 });
-  return { admin };
+  const newUser = new User({ name, password });
+  await newUser.save();
+  const user = await User.findOne({ name }, { password: 0, __v: 0 });
+  return { user };
 };
 
 const loginAdminService = async ({ name, password }) => {
-  const resAdmin = await Admin.findOne({ name });
-  if (resAdmin && (await bcrypt.compare(password, resAdmin.password))) {
+  const resUser = await User.findOne({ name });
+  if (resUser && (await bcrypt.compare(password, resUser.password))) {
     const token = jwt.sign(
       {
-        _id: resAdmin._id,
+        _id: resUser._id,
       },
       process.env.JWT_SECRET,
       { expiresIn: "14d" }
     );
 
-    await Admin.findOneAndUpdate(
-      { _id: resAdmin._id },
+    await User.findOneAndUpdate(
+      { _id: resUser._id },
       { loggedIn: true },
       { new: true }
     );
-    const admin = await Admin.findOne(
-      { _id: resAdmin._id },
+    const user = await User.findOne(
+      { _id: resUser._id },
       { password: 0, __v: 0 }
     );
 
-    return { token, admin };
+    return { token, user };
   }
 };
 
 const logoutAdminService = async (_id) => {
-  return await Admin.findByIdAndUpdate(
+  return await User.findByIdAndUpdate(
     { _id, loggedIn: true },
     { loggedIn: false },
     { new: true }
@@ -48,7 +48,7 @@ const logoutAdminService = async (_id) => {
 };
 
 const patchAdminService = async (_id, body) => {
-  return await Admin.findOneAndUpdate(
+  return await User.findOneAndUpdate(
     {
       _id,
     },
