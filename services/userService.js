@@ -60,9 +60,28 @@ const deleteUserService = async (owner, userId) => {
   }
 };
 
+const patchUserService = async (owner, userId, body) => {
+  const resOwner = await User.findOne({ _id: owner });
+  if (resOwner.admin === false) {
+    return;
+  } else {
+    await User.findOneAndUpdate(
+      {
+        _id: userId,
+      },
+      body,
+      { new: true }
+    );
+    const user = await User.findOne({ _id: userId }, { password: 0, __v: 0 });
+
+    return { user };
+  }
+};
+
 module.exports = {
   createUserService,
   loginUserService,
   logoutUserService,
   deleteUserService,
+  patchUserService,
 };

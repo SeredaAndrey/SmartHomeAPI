@@ -9,8 +9,12 @@ const {
   loginUserService,
   logoutUserService,
   deleteUserService,
+  patchUserService,
 } = require("../services/userService");
-const { workUserValidate } = require("../validate/userValidate");
+const {
+  workUserValidate,
+  patchUserValidate,
+} = require("../validate/userValidate");
 
 const createUserController = async (req, res, next) => {
   const requestValidate = workUserValidate.validate(req.body);
@@ -73,9 +77,30 @@ const deleteUserController = async (req, res, next) => {
   } else new FoundingError("user not found");
 };
 
+const patchUserController = async (req, res, next) => {
+  const owner = req.user._id;
+  const { userId } = req.params;
+  const body = req.body;
+
+  const requestValidate = patchUserValidate.validate(req.body);
+
+  if (!requestValidate.error) {
+    const user = await patchUserService(owner, userId, body);
+    if (!user) {
+      throw new ConflictError("something is wrong");
+    }
+    return res.status(200).json({
+      message: "patching user data successful",
+      code: 200,
+      data: user,
+    });
+  } else throw new ValidateError(requestValidate.error);
+};
+
 module.exports = {
   createUserController,
   loginUserController,
   logoutUserController,
   deleteUserController,
+  patchUserController,
 };
