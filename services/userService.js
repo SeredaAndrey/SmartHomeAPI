@@ -44,4 +44,26 @@ const loginUserService = async ({ name, password }) => {
   }
 };
 
-module.exports = { createUserService, loginUserService };
+const logoutUserService = async (_id) => {
+  return await User.findByIdAndUpdate(
+    { _id, loggedIn: true },
+    { loggedIn: false },
+    { new: true }
+  );
+};
+
+const deleteUserService = async (owner, userId) => {
+  const resOwner = await Admin.findOne({ _id: owner });
+  if (resOwner.owner) {
+    return;
+  } else {
+    return await User.findOneAndRemove({ _id: userId });
+  }
+};
+
+module.exports = {
+  createUserService,
+  loginUserService,
+  logoutUserService,
+  deleteUserService,
+};

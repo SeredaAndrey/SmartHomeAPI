@@ -2,10 +2,13 @@ const {
   ValidateError,
   ConflictError,
   AutorizationError,
+  FoundingError,
 } = require("../middleware/errorHandler");
 const {
   createUserService,
   loginUserService,
+  logoutUserService,
+  deleteUserService,
 } = require("../services/userService");
 const { workUserValidate } = require("../validate/userValidate");
 
@@ -47,4 +50,32 @@ const loginUserController = async (req, res, next) => {
   } else throw new ValidateError(requestValidate.error);
 };
 
-module.exports = { createUserController, loginUserController };
+const logoutUserController = async (req, res, next) => {
+  const _id = req.user._id;
+  const result = await logoutUserService(_id);
+  if (result) {
+    return res.status(204).json({
+      message: "logout user successful",
+      code: 204,
+    });
+  }
+};
+
+const deleteUserController = async (req, res, next) => {
+  const owner = req.user._id;
+  const { userId } = req.params;
+  const data = await deleteUserService(owner, userId);
+  if (data) {
+    return res.status(200).json({
+      message: "user deleted",
+      code: 200,
+    });
+  } else new FoundingError("user not found");
+};
+
+module.exports = {
+  createUserController,
+  loginUserController,
+  logoutUserController,
+  deleteUserController,
+};
