@@ -48,7 +48,6 @@ const logoutAdminService = async (_id) => {
 };
 
 const patchAdminService = async (_id, body) => {
-  console.log("body: ", body);
   return await Admin.findOneAndUpdate(
     {
       _id,

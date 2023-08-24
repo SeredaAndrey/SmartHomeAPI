@@ -66,8 +66,6 @@ const patchAdminController = async (req, res, next) => {
   const _id = req.user._id;
   const body = req.body;
 
-  console.log("body: ", body);
-
   const requestValidate = patchAdminValidate.validate(req.body);
 
   if (!requestValidate.error) {
