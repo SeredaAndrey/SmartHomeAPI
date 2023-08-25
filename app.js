@@ -7,6 +7,7 @@ const { userRouter } = require("./routes/userRoute");
 const { homeRouter } = require("./routes/homeRoute");
 
 const { errorHandler } = require("./middleware/errorHandler");
+const { roomRouter } = require("./routes/roomRoute");
 
 require("dotenv").config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/admin", adminRouter);
 app.use("/user", userRouter);
 app.use("/home", homeRouter);
+app.use("/room/", roomRouter);
 
 app.use(errorHandler);
 

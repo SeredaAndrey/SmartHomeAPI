@@ -11,7 +11,6 @@ const room = new Schema({
   flor: {
     type: String,
     default: null,
-    required: [true, "Name is required"],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,3 +18,7 @@ const room = new Schema({
     default: null,
   },
 });
+
+const Room = mongoose.model("room", room);
+
+module.exports = Room;
