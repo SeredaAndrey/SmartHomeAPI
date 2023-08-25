@@ -9,6 +9,7 @@ const {
   logoutUserController,
   deleteUserController,
   patchUserController,
+  getUsersController,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.post("/create", asyncWrapper(createUserController));
 router.get("/logout", asyncWrapper(logoutUserController));
 router.delete("/:userId", asyncWrapper(deleteUserController));
 router.patch("/:userId", asyncWrapper(patchUserController));
+router.get("/", asyncWrapper(getUsersController));
 
 module.exports = { userRouter: router };

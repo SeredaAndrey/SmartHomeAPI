@@ -52,19 +52,17 @@ const logoutUserService = async (_id) => {
 };
 
 const deleteUserService = async (owner, userId) => {
-  const resOwner = await User.findOne({ _id: owner });
-  if (resOwner.admin === false) {
-    return;
-  } else {
+  const { admin } = await User.findOne({ _id: owner });
+  console.log(admin);
+  if (admin === "true") {
     return await User.findOneAndRemove({ _id: userId });
   }
+  return;
 };
 
 const patchUserService = async (owner, userId, body) => {
-  const resOwner = await User.findOne({ _id: owner });
-  if (resOwner.admin === false) {
-    return;
-  } else {
+  const { admin } = await User.findOne({ _id: owner });
+  if (admin === "true") {
     await User.findOneAndUpdate(
       {
         _id: userId,
@@ -76,6 +74,11 @@ const patchUserService = async (owner, userId, body) => {
 
     return { user };
   }
+  return;
+};
+
+const getUsersService = async (owner) => {
+  return await User.find({ owner: owner });
 };
 
 module.exports = {
@@ -84,4 +87,5 @@ module.exports = {
   logoutUserService,
   deleteUserService,
   patchUserService,
+  getUsersService,
 };

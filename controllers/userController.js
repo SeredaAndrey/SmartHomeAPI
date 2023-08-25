@@ -10,6 +10,7 @@ const {
   logoutUserService,
   deleteUserService,
   patchUserService,
+  getUsersService,
 } = require("../services/userService");
 const {
   workUserValidate,
@@ -69,12 +70,13 @@ const deleteUserController = async (req, res, next) => {
   const owner = req.user._id;
   const { userId } = req.params;
   const data = await deleteUserService(owner, userId);
+  console.log(data);
   if (data) {
     return res.status(200).json({
       message: "user deleted",
       code: 200,
     });
-  } else new FoundingError("user not found");
+  } else throw new FoundingError("user not found");
 };
 
 const patchUserController = async (req, res, next) => {
@@ -87,7 +89,7 @@ const patchUserController = async (req, res, next) => {
   if (!requestValidate.error) {
     const user = await patchUserService(owner, userId, body);
     if (!user) {
-      throw new ConflictError("something is wrong");
+      throw new ConflictError("permision denied");
     }
     return res.status(200).json({
       message: "patching user data successful",
@@ -97,10 +99,25 @@ const patchUserController = async (req, res, next) => {
   } else throw new ValidateError(requestValidate.error);
 };
 
+const getUsersController = async (req, res, next) => {
+  const owner = req.user._id;
+  console.log("owner: ", owner);
+  const users = await getUsersService(owner);
+
+  if (users) {
+    return res.status(200).json({
+      message: "getting users data successful",
+      code: 200,
+      data: users,
+    });
+  }
+};
+
 module.exports = {
   createUserController,
   loginUserController,
   logoutUserController,
   deleteUserController,
   patchUserController,
+  getUsersController,
 };
