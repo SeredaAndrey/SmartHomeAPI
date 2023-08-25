@@ -77,8 +77,12 @@ const patchUserService = async (owner, userId, body) => {
   return;
 };
 
-const getUsersService = async (owner) => {
-  return await User.find({ owner: owner });
+const getUsersService = async (userId) => {
+  const user = await User.findOne({ _id: userId });
+  if (user.admin === "true") {
+    return await User.find({ owner: userId });
+  }
+  return await User.find({ owner: user.owner });
 };
 
 module.exports = {

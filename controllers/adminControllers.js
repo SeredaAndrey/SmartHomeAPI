@@ -8,6 +8,7 @@ const {
   loginAdminService,
   logoutAdminService,
   patchAdminService,
+  getAdminService,
 } = require("../services/adminService");
 const {
   workUserValidate,
@@ -81,9 +82,23 @@ const patchAdminController = async (req, res, next) => {
   } else throw new ValidateError(requestValidate.error);
 };
 
+const getAdminController = async (req, res, next) => {
+  const userId = req.user._id;
+  const admin = await getAdminService(userId);
+
+  if (admin) {
+    return res.status(200).json({
+      message: "getting amin data successful",
+      code: 200,
+      data: admin,
+    });
+  }
+};
+
 module.exports = {
   createAdminController,
   loginAdminController,
   logoutAdminController,
   patchAdminController,
+  getAdminController,
 };

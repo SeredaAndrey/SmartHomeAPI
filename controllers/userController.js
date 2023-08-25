@@ -100,9 +100,8 @@ const patchUserController = async (req, res, next) => {
 };
 
 const getUsersController = async (req, res, next) => {
-  const owner = req.user._id;
-  console.log("owner: ", owner);
-  const users = await getUsersService(owner);
+  const userId = req.user._id;
+  const users = await getUsersService(userId);
 
   if (users) {
     return res.status(200).json({

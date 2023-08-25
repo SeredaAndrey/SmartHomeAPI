@@ -57,9 +57,18 @@ const patchAdminService = async (_id, body) => {
   );
 };
 
+const getAdminService = async (userId) => {
+  const user = await User.findOne({ _id: userId });
+  if (user.admin === "true") {
+    return user;
+  }
+  return await User.findOne({ _id: user.owner });
+};
+
 module.exports = {
   createAdminService,
   loginAdminService,
   logoutAdminService,
   patchAdminService,
+  getAdminService,
 };
