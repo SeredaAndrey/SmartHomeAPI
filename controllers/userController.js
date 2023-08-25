@@ -70,7 +70,6 @@ const deleteUserController = async (req, res, next) => {
   const owner = req.user._id;
   const { userId } = req.params;
   const data = await deleteUserService(owner, userId);
-  console.log(data);
   if (data) {
     return res.status(200).json({
       message: "user deleted",
@@ -110,6 +109,7 @@ const getUsersController = async (req, res, next) => {
       data: users,
     });
   }
+  throw new FoundingError("users not found");
 };
 
 module.exports = {

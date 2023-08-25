@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const { adminRouter } = require("./routes/adminRoute");
 const { userRouter } = require("./routes/userRoute");
+const { homeRouter } = require("./routes/homeRoute");
 
 const { errorHandler } = require("./middleware/errorHandler");
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use("/admin", adminRouter);
 app.use("/user", userRouter);
+app.use("/home", homeRouter);
 
 app.use(errorHandler);
 

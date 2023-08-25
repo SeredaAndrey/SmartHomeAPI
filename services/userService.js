@@ -5,7 +5,7 @@ const User = require("../schemas/userSchemas");
 
 const createUserService = async (name, password, owner) => {
   const resOwner = await User.findOne({ _id: owner });
-  if (resOwner.admin === false) {
+  if (resOwner.admin === "false") {
     return;
   } else {
     const resUser = await User.findOne({ name, owner });
@@ -53,7 +53,6 @@ const logoutUserService = async (_id) => {
 
 const deleteUserService = async (owner, userId) => {
   const { admin } = await User.findOne({ _id: owner });
-  console.log(admin);
   if (admin === "true") {
     return await User.findOneAndRemove({ _id: userId });
   }
